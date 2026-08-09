@@ -33,8 +33,8 @@ useSeoMeta({
       </NuxtLink>
 
       <nav class="site-nav">
-        <NuxtLink to="/posts">
-          Posts
+        <NuxtLink to="/programs">
+          Programs
         </NuxtLink>
       </nav>
     </div>
