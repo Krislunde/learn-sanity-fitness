@@ -1,0 +1,23 @@
+@use "variables" as v;
+
+:root {
+  --bg: #ffffff;
+  --fg: #18181b;
+  --muted: #64748b;
+  --border: #e4e4e7;
+  --accent: #00a155;
+
+  --content-width: #{v.$content-width};
+  --gutter: #{v.$gutter};
+  --font-sans: #{v.$font-sans};
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0f14;
+    --fg: #e6e8eb;
+    --muted: #94a3b8;
+    --border: #1f2937;
+    --accent: #00dc82;
+  }
+}

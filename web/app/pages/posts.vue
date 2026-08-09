@@ -4,20 +4,50 @@ const { data: posts } = await useSanityQuery<Array<{ _id: string, title?: string
 </script>
 
 <template>
-  <UPage>
-    <UPageHeader title="Posts" />
+  <div>
+    <h1>Posts</h1>
 
-    <UPageBody>
-      <ul>
-        <li
-          v-for="post in posts || []"
-          :key="post._id"
-        >
-          <NuxtLink :to="`/${post.slug?.current}`">
-            {{ post.title }}
-          </NuxtLink>
-        </li>
-      </ul>
-    </UPageBody>
-  </UPage>
+    <ul
+      v-if="posts?.length"
+      class="post-list"
+    >
+      <li
+        v-for="post in posts"
+        :key="post._id"
+      >
+        <NuxtLink :to="`/${post.slug?.current}`">
+          {{ post.title }}
+        </NuxtLink>
+      </li>
+    </ul>
+
+    <p
+      v-else
+      class="empty"
+    >
+      No posts yet.
+    </p>
+  </div>
 </template>
+
+<style lang="scss" scoped>
+.post-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  li + li {
+    border-top: 1px solid var(--border);
+  }
+
+  a {
+    display: block;
+    padding-block: 0.875rem;
+    font-weight: 550;
+  }
+}
+
+.empty {
+  color: var(--muted);
+}
+</style>

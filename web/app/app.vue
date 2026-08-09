@@ -11,74 +11,93 @@ useHead({
   }
 })
 
-const title = 'Nuxt Starter Template'
-const description = 'A production-ready starter template powered by Nuxt UI. Build beautiful, accessible, and performant applications in minutes, not hours.'
+const title = 'Fitness'
+const description = 'A fitness site powered by Sanity.'
 
 useSeoMeta({
   title,
   description,
   ogTitle: title,
-  ogDescription: description,
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/starter-light.png',
-  twitterCard: 'summary_large_image'
+  ogDescription: description
 })
 </script>
 
 <template>
-  <UApp>
-    <UHeader>
-      <template #left>
-        <NuxtLink to="/">
-          <AppLogo class="w-auto h-6 shrink-0" />
+  <header class="site-header">
+    <div class="wrap">
+      <NuxtLink
+        to="/"
+        class="site-title"
+      >
+        Fitness
+      </NuxtLink>
+
+      <nav class="site-nav">
+        <NuxtLink to="/posts">
+          Posts
         </NuxtLink>
+      </nav>
+    </div>
+  </header>
 
-        <TemplateMenu />
-      </template>
-
-      <template #right>
-        <UButton
-          to="/posts"
-          label="Posts"
-          color="neutral"
-          variant="ghost"
-        />
-
-        <UColorModeButton />
-
-        <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-          color="neutral"
-          variant="ghost"
-        />
-      </template>
-    </UHeader>
-
-    <UMain>
+  <main class="site-main">
+    <div class="wrap">
       <NuxtPage />
-    </UMain>
+    </div>
+  </main>
 
-    <USeparator icon="i-simple-icons-nuxtdotjs" />
-
-    <UFooter>
-      <template #left>
-        <p class="text-sm text-muted">
-          Built with Nuxt UI • © {{ new Date().getFullYear() }}
-        </p>
-      </template>
-
-      <template #right>
-        <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-          color="neutral"
-          variant="ghost"
-        />
-      </template>
-    </UFooter>
-  </UApp>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>© {{ new Date().getFullYear() }} Fitness</p>
+    </div>
+  </footer>
 </template>
+
+<style lang="scss" scoped>
+@use "~/assets/scss/variables" as v;
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+
+  .wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: v.$header-height;
+  }
+}
+
+.site-title {
+  color: var(--fg);
+  font-size: 1rem;
+  font-weight: 650;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.site-main {
+  padding-block: 2rem 3rem;
+
+  @include v.respond-to("sm") {
+    padding-block: 2.5rem 4rem;
+  }
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.875rem;
+
+  .wrap {
+    padding-block: 1.25rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+</style>

@@ -1,0 +1,37 @@
+// Typography for Portable Text rendered by <SanityContent>.
+// Shared rather than scoped to a page: the markup is produced by a child
+// component, so scoped styles would not reach it without :deep() everywhere.
+
+.prose {
+  > * + * {
+    margin-top: 1.1em;
+  }
+
+  h2 {
+    margin-top: 2rem;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+  }
+
+  h3 {
+    margin-top: 1.75rem;
+    font-size: 1.15rem;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5rem;
+  }
+
+  blockquote {
+    margin-left: 0;
+    padding-left: 1rem;
+    border-left: 3px solid var(--border);
+    color: var(--muted);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

@@ -5,17 +5,20 @@ const { data: post } = await useSanityQuery<{ _id: string, title?: string, body?
   query,
   { slug: route.params.slug }
 )
+
+if (!post.value) {
+  throw createError({ statusCode: 404, statusMessage: 'Post not found', fatal: true })
+}
 </script>
 
 <template>
-  <UPage v-if="post">
-    <UPageHeader :title="post.title" />
+  <article v-if="post">
+    <h1>{{ post.title }}</h1>
 
-    <UPageBody>
-      <SanityContent
-        v-if="post.body"
-        :value="post.body"
-      />
-    </UPageBody>
-  </UPage>
+    <SanityContent
+      v-if="post.body"
+      :value="post.body"
+      class="prose"
+    />
+  </article>
 </template>
