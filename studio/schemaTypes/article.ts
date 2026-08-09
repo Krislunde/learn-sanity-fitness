@@ -41,7 +41,7 @@ export const article = defineType({
             defineField({
               name: 'body',
               type: 'array',
-              of: [defineArrayMember({type: 'block'})],
+              of: [defineArrayMember({type: 'block'}), defineArrayMember({type: 'callout'})],
             }),
           ],
           preview: {
