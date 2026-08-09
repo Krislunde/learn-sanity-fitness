@@ -3,8 +3,8 @@
     <h1>Fitness</h1>
 
     <p>
-      <NuxtLink to="/posts">
-        Browse posts
+      <NuxtLink to="/programs">
+        Browse programs
       </NuxtLink>
     </p>
   </div>

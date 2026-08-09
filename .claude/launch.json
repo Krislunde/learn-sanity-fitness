@@ -4,9 +4,16 @@
     {
       "name": "web",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--dir", "web", "dev"],
-      "port": 3000,
-      "autoPort": true
+      "runtimeArgs": ["--dir", "web", "dev", "--port", "3001"],
+      "port": 3001,
+      "autoPort": false
+    },
+    {
+      "name": "studio",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--dir", "studio", "dev", "--port", "3333"],
+      "port": 3333,
+      "autoPort": false
     }
   ]
 }
