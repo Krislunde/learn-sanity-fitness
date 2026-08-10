@@ -9,6 +9,7 @@ type Program = {
   workouts?: Array<{
     _id: string
     title?: string
+    slug?: { current?: string }
     order?: number
     estimatedDuration?: number
   }>
@@ -18,7 +19,7 @@ const route = useRoute()
 const query = groq`*[_type == "program" && slug.current == $slug][0]{
   _id, title, description, goal, duration,
   coach->{ name, slug },
-  workouts[]->{ _id, title, order, estimatedDuration }
+  workouts[]->{ _id, title, slug, order, estimatedDuration }
 }`
 const { data: program } = await useSanityQuery<Program | null>(query, { slug: route.params.slug })
 
@@ -54,7 +55,12 @@ if (!program.value) {
           v-for="workout in program.workouts"
           :key="workout._id"
         >
-          <span class="workout-title">{{ workout.title }}</span>
+          <NuxtLink
+            :to="`/workouts/${workout.slug?.current}`"
+            class="workout-title"
+          >
+            {{ workout.title }}
+          </NuxtLink>
           <span
             v-if="workout.estimatedDuration"
             class="meta"

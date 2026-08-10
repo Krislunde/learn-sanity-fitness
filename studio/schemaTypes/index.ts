@@ -1,5 +1,6 @@
 import {article} from './article'
 import {bodyRegion} from './bodyRegion'
+import {callout} from './callout'
 import {equipment} from './equipment'
 import {equipmentCategory} from './equipmentCategory'
 import {exercise} from './exercise'
@@ -24,4 +25,6 @@ export const schemaTypes = [
   person,
   article,
   testimonial,
+  // Portable Text blocks
+  callout,
 ]
