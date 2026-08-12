@@ -33,6 +33,7 @@
     "prettier": "^3.5",
     "typescript": "^5.8"
   },
+  "packageManager": "pnpm@11.18.0",
   "prettier": {
     "bracketSpacing": false,
     "printWidth": 100,
