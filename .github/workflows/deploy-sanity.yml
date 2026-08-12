@@ -57,10 +57,10 @@ jobs:
             echo "Error: SANITY_STUDIO_HOSTNAME is not set" >&2
             exit 1
           fi
-          if [[ "$SANITY_ACTIVE_ENV" == "development" ]]; then
-            pnpm run deploy -- --yes --source-maps
+          if [ "${{ github.ref_name }}" == "development" ]; then
+            pnpm run deploy --source-maps --yes
           else
-            pnpm run deploy -- --yes
+            pnpm run deploy --yes
           fi
           echo "STUDIO_URL=https://${SANITY_STUDIO_HOSTNAME}.sanity.studio" >> $GITHUB_OUTPUT
 
@@ -102,6 +102,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Cleanup PR preview
-        run: pnpm exec sanity undeploy -- --yes
+        run: pnpm exec sanity undeploy --yes
         env:
           SANITY_STUDIO_HOSTNAME: ${{ vars.HOSTNAME }}-pr-${{ github.event.pull_request.number }}
