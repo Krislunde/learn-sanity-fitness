@@ -1,0 +1,144 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  SCHEMA_VALIDATION_REPORT: schema-report.txt
+  DATASET_VALIDATION_REPORT: dataset-report.txt
+
+jobs:
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: lts/*
+      - run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: lts/*
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint -- --max-warnings 0
+
+  validate-schema:
+    name: Validate Studio schema
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: lts/*
+      - run: npm ci
+
+      - name: Validate Studio schema
+        id: validate
+        run: |
+          npx sanity schema validate >> ${{ env.SCHEMA_VALIDATION_REPORT }}
+          exit_code=$?
+          {
+            echo "## Schema Validation Results"
+            echo "\`\`\`"
+            cat ${{ env.SCHEMA_VALIDATION_REPORT }}
+            echo "\`\`\`"
+          } >> $GITHUB_STEP_SUMMARY
+          exit $exit_code
+
+      - name: Post schema validation report
+        uses: actions/github-script@v6
+        if: failure() && steps.validate.outcome == 'failure'
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('${{ env.SCHEMA_VALIDATION_REPORT }}', 'utf8');
+            const body = [
+                '### ❌ Schema validation failed',
+                '',
+                `\`\`\`${report}\`\`\``,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
+            });
+
+  validate-dataset:
+    name: Validate dataset
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'pull_request' && github.base_ref == 'main') || (github.ref == 'refs/heads/main')
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: npm
+          node-version: lts/*
+      - run: npm ci
+
+      - name: Validate dataset
+        id: validate
+        run: |
+          npx sanity documents validate --yes --level info >> ${{ env.DATASET_VALIDATION_REPORT }}
+          exit_code=$?
+          {
+            echo "## Dataset Validation Results"
+            echo "\`\`\`"
+            cat ${{ env.DATASET_VALIDATION_REPORT }}
+            echo "\`\`\`"
+          } >> $GITHUB_STEP_SUMMARY
+          exit $exit_code
+        env:
+          SANITY_ACTIVE_ENV: production
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+          # TODO: delete
+          SANITY_STUDIO_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID }}
+
+      - name: Post dataset validation report
+        if: failure() && steps.validate.outcome == 'failure'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs'); 
+            const report = fs.readFileSync('${{ env.DATASET_VALIDATION_REPORT }}', 'utf8');
+            const body = [
+                '### ❌ Dataset validation failed',
+                '',
+                `\`\`\`${report}\`\`\``,
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
