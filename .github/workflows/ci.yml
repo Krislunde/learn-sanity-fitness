@@ -15,6 +15,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
 
+defaults:
+  run:
+    working-directory: studio
+
 env:
   SCHEMA_VALIDATION_REPORT: schema-report.txt
   DATASET_VALIDATION_REPORT: dataset-report.txt
@@ -25,44 +29,56 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: studio/package.json
       - uses: actions/setup-node@v4
         with:
-          cache: npm
           node-version: lts/*
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
 
       - name: Typecheck
-        run: npm run typecheck
+        run: pnpm run typecheck
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: studio/package.json
       - uses: actions/setup-node@v4
         with:
-          cache: npm
           node-version: lts/*
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: npm run lint -- --max-warnings 0
+        run: pnpm run lint --max-warnings 0
 
   validate-schema:
     name: Validate Studio schema
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: studio/package.json
       - uses: actions/setup-node@v4
         with:
-          cache: npm
           node-version: lts/*
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
 
       - name: Validate Studio schema
         id: validate
         run: |
-          npx sanity schema validate >> ${{ env.SCHEMA_VALIDATION_REPORT }}
+          pnpm exec sanity schema validate >> ${{ env.SCHEMA_VALIDATION_REPORT }}
           exit_code=$?
           {
             echo "## Schema Validation Results"
@@ -78,7 +94,7 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const report = fs.readFileSync('${{ env.SCHEMA_VALIDATION_REPORT }}', 'utf8');
+            const report = fs.readFileSync('studio/${{ env.SCHEMA_VALIDATION_REPORT }}', 'utf8');
             const body = [
                 '### ❌ Schema validation failed',
                 '',
@@ -99,16 +115,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: studio/package.json
       - uses: actions/setup-node@v4
         with:
-          cache: npm
           node-version: lts/*
-      - run: npm ci
+          cache: pnpm
+          cache-dependency-path: studio/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
 
       - name: Validate dataset
         id: validate
         run: |
-          npx sanity documents validate --yes --level info >> ${{ env.DATASET_VALIDATION_REPORT }}
+          pnpm exec sanity documents validate --yes --level info >> ${{ env.DATASET_VALIDATION_REPORT }}
           exit_code=$?
           {
             echo "## Dataset Validation Results"
@@ -120,7 +140,6 @@ jobs:
         env:
           SANITY_ACTIVE_ENV: production
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-          # TODO: delete
           SANITY_STUDIO_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID }}
 
       - name: Post dataset validation report
@@ -128,8 +147,8 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const fs = require('fs'); 
-            const report = fs.readFileSync('${{ env.DATASET_VALIDATION_REPORT }}', 'utf8');
+            const fs = require('fs');
+            const report = fs.readFileSync('studio/${{ env.DATASET_VALIDATION_REPORT }}', 'utf8');
             const body = [
                 '### ❌ Dataset validation failed',
                 '',
@@ -137,8 +156,50 @@ jobs:
             ].join('\n');
 
             await github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body,
             });
+
+  web-lint:
+    name: Web Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: web/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm run lint --max-warnings 0
+
+  web-typecheck:
+    name: Web Typecheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: web/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm run typecheck

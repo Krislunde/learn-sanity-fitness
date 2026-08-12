@@ -22,7 +22,7 @@ export const exercise = defineType({
       name: 'instructions',
       type: 'array',
       description: 'How to perform the movement, step by step.',
-      of: [defineArrayMember({type: 'block'})],
+      of: [defineArrayMember({type: 'block'}), defineArrayMember({type: 'callout'})],
     }),
     defineField({
       name: 'demoImage',
