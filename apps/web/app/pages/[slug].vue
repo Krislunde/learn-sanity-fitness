@@ -1,27 +1,10 @@
 <script setup lang="ts">
-type Program = {
-  _id: string
-  title?: string
-  description?: string
-  goal?: string
-  duration?: number
-  coach?: { name?: string, slug?: { current?: string } }
-  workouts?: Array<{
-    _id: string
-    title?: string
-    slug?: { current?: string }
-    order?: number
-    estimatedDuration?: number
-  }>
-}
+import { PROGRAM_QUERY } from '~/sanity/queries'
+import type { PROGRAM_QUERY_RESULT } from '~/sanity/types'
+import { FOCUS_LABELS } from '~/sanity/labels'
 
 const route = useRoute()
-const query = groq`*[_type == "program" && slug.current == $slug][0]{
-  _id, title, description, goal, duration,
-  coach->{ name, slug },
-  workouts[]->{ _id, title, slug, order, estimatedDuration }
-}`
-const { data: program } = await useSanityQuery<Program | null>(query, { slug: route.params.slug })
+const { data: program } = await useSanityQuery<PROGRAM_QUERY_RESULT>(PROGRAM_QUERY, { slug: route.params.slug })
 
 if (!program.value) {
   throw createError({ statusCode: 404, statusMessage: 'Program not found', fatal: true })
@@ -33,11 +16,11 @@ if (!program.value) {
     <h1>{{ program.title }}</h1>
 
     <p
-      v-if="program.goal || program.duration || program.coach"
+      v-if="program.focus || program.duration || program.coach"
       class="meta"
     >
-      <span v-if="program.goal">{{ program.goal }}</span>
-      <span v-if="program.goal && (program.duration || program.coach)"> · </span>
+      <span v-if="program.focus">{{ FOCUS_LABELS[program.focus] || program.focus }}</span>
+      <span v-if="program.focus && (program.duration || program.coach)"> · </span>
       <span v-if="program.duration">{{ program.duration }} weeks</span>
       <span v-if="program.duration && program.coach"> · </span>
       <span v-if="program.coach">with {{ program.coach.name }}</span>

@@ -1,16 +1,9 @@
 <script setup lang="ts">
-type ProgramListItem = {
-  _id: string
-  title?: string
-  slug?: { current?: string }
-  goal?: string
-  duration?: number
-}
+import { PROGRAMS_QUERY } from '~/sanity/queries'
+import type { PROGRAMS_QUERY_RESULT } from '~/sanity/types'
+import { FOCUS_LABELS } from '~/sanity/labels'
 
-const query = groq`*[_type == "program" && defined(slug.current)] | order(title asc){
-  _id, title, slug, goal, duration
-}`
-const { data: programs } = await useSanityQuery<ProgramListItem[]>(query)
+const { data: programs } = await useSanityQuery<PROGRAMS_QUERY_RESULT>(PROGRAMS_QUERY)
 </script>
 
 <template>
@@ -30,11 +23,11 @@ const { data: programs } = await useSanityQuery<ProgramListItem[]>(query)
         </NuxtLink>
 
         <p
-          v-if="program.goal || program.duration"
+          v-if="program.focus || program.duration"
           class="meta"
         >
-          <span v-if="program.goal">{{ program.goal }}</span>
-          <span v-if="program.goal && program.duration"> · </span>
+          <span v-if="program.focus">{{ FOCUS_LABELS[program.focus] || program.focus }}</span>
+          <span v-if="program.focus && program.duration"> · </span>
           <span v-if="program.duration">{{ program.duration }} weeks</span>
         </p>
       </li>

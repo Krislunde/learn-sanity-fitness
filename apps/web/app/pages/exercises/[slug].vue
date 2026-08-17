@@ -1,29 +1,11 @@
 <script setup lang="ts">
 import CalloutBlock from '~/components/CalloutBlock.vue'
-
-type Exercise = {
-  _id: string
-  name?: string
-  difficulty?: string
-  instructions?: Array<{ _type: string, [key: string]: unknown }>
-  demoVideoUrl?: string
-  muscles?: Array<{ name?: string }>
-  equipment?: { name?: string }
-}
-
-const DIFFICULTY_LABELS: Record<string, string> = {
-  beginner: 'Beginner',
-  intermediate: 'Intermediate',
-  advanced: 'Advanced'
-}
+import { EXERCISE_QUERY } from '~/sanity/queries'
+import type { EXERCISE_QUERY_RESULT } from '~/sanity/types'
+import { DIFFICULTY_LABELS } from '~/sanity/labels'
 
 const route = useRoute()
-const query = groq`*[_type == "exercise" && slug.current == $slug][0]{
-  _id, name, difficulty, instructions, demoVideoUrl,
-  muscles[]->{ name },
-  equipment->{ name }
-}`
-const { data: exercise } = await useSanityQuery<Exercise | null>(query, { slug: route.params.slug })
+const { data: exercise } = await useSanityQuery<EXERCISE_QUERY_RESULT>(EXERCISE_QUERY, { slug: route.params.slug })
 
 if (!exercise.value) {
   throw createError({ statusCode: 404, statusMessage: 'Exercise not found', fatal: true })
