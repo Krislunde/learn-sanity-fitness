@@ -1,6 +1,12 @@
+packages:
+  - "apps/*"
 allowBuilds:
+  '@parcel/watcher': false
   esbuild: true
+  unrs-resolver: true
 minimumReleaseAgeExclude:
+  - '@sanity/blueprints@0.23.4'
+  - '@sanity/functions@1.6.5'
   - '@sanity/diff@6.9.2'
   - '@sanity/mutator@6.9.2'
   - '@sanity/schema@6.9.2'
