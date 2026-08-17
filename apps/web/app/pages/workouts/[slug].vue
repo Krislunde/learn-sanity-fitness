@@ -1,31 +1,10 @@
 <script setup lang="ts">
-type Workout = {
-  _id: string
-  title?: string
-  order?: number
-  estimatedDuration?: number
-  coach?: { name?: string }
-  exercises?: Array<{
-    _id: string
-    name?: string
-    slug?: { current?: string }
-    difficulty?: string
-  }>
-}
-
-const DIFFICULTY_LABELS: Record<string, string> = {
-  beginner: 'Beginner',
-  intermediate: 'Intermediate',
-  advanced: 'Advanced'
-}
+import { WORKOUT_QUERY } from '~/sanity/queries'
+import type { WORKOUT_QUERY_RESULT } from '~/sanity/types'
+import { DIFFICULTY_LABELS } from '~/sanity/labels'
 
 const route = useRoute()
-const query = groq`*[_type == "workout" && slug.current == $slug][0]{
-  _id, title, order, estimatedDuration,
-  coach->{ name },
-  exercises[]->{ _id, name, slug, difficulty }
-}`
-const { data: workout } = await useSanityQuery<Workout | null>(query, { slug: route.params.slug })
+const { data: workout } = await useSanityQuery<WORKOUT_QUERY_RESULT>(WORKOUT_QUERY, { slug: route.params.slug })
 
 if (!workout.value) {
   throw createError({ statusCode: 404, statusMessage: 'Workout not found', fatal: true })

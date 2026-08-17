@@ -4,3 +4,13 @@
 
 # Machine-local Claude Code settings
 .claude/settings.local.json
+
+# Archives / build output
+*.tar.gz
+
+node_modules
+
+# Sanity Functions
+functions/**/.env*
+functions/**/.build/
+functions/**/node_modules/

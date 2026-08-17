@@ -12,51 +12,49 @@ permissions:
   contents: read
   pull-requests: write
 
-defaults:
-  run:
-    working-directory: apps/studio
-
 env:
   SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
-  # Base Studio hostname. Falls back to the value committed in apps/studio/.env
-  # so a deploy still works if the repo variable has not been set.
-  STUDIO_HOSTNAME: ${{ vars.HOSTNAME || 'fit' }}
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
-  cancel-in-progress: true
+  # Prefer the repo variable; fall back to the committed value so a deploy still
+  # works before SANITY_STUDIO_BASE_HOSTNAME has been added to the repo.
+  STUDIO_BASE_HOSTNAME: ${{ vars.SANITY_STUDIO_BASE_HOSTNAME || vars.HOSTNAME || 'fit' }}
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+
+    # Keyed by PR number for previews, by branch name for main/development.
+    # A branch deploy can never collide with a PR whose head branch happens to
+    # share that name (e.g. the development -> main promotion PR).
+    concurrency:
+      group: studio-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || github.ref_name }}
+      cancel-in-progress: true
+
     environment:
       name: ${{ github.ref == 'refs/heads/main' && 'Production' || github.ref == 'refs/heads/development' && 'Development' || 'Preview' }}
       url: ${{ steps.deploy.outputs.STUDIO_URL }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          package_json_file: apps/studio/package.json
       - uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: pnpm
-          cache-dependency-path: apps/studio/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
 
       - name: Set Studio hostname
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "SANITY_STUDIO_HOSTNAME=${STUDIO_HOSTNAME}-pr-${{ github.event.pull_request.number }}" >> "$GITHUB_ENV"
-          elif [ "${{ github.ref_name }}" = "development" ]; then
-            # Development gets its own hostname and dataset so it never
-            # overwrites the production Studio.
-            echo "SANITY_STUDIO_HOSTNAME=${STUDIO_HOSTNAME}-development" >> "$GITHUB_ENV"
-            echo "SANITY_ACTIVE_ENV=development" >> "$GITHUB_ENV"
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "SANITY_STUDIO_HOSTNAME=${STUDIO_BASE_HOSTNAME}-pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
+            echo "SANITY_ACTIVE_ENV=development" >> $GITHUB_ENV
+          elif [ "${{ github.ref }}" == "refs/heads/development" ]; then
+            echo "SANITY_STUDIO_HOSTNAME=${STUDIO_BASE_HOSTNAME}-development" >> $GITHUB_ENV
+            echo "SANITY_ACTIVE_ENV=development" >> $GITHUB_ENV
           else
-            echo "SANITY_STUDIO_HOSTNAME=${STUDIO_HOSTNAME}" >> "$GITHUB_ENV"
+            echo "SANITY_STUDIO_HOSTNAME=${STUDIO_BASE_HOSTNAME}" >> $GITHUB_ENV
+            echo "SANITY_ACTIVE_ENV=production" >> $GITHUB_ENV
           fi
 
       - name: Build and deploy Sanity Studio
@@ -66,12 +64,14 @@ jobs:
             echo "Error: SANITY_STUDIO_HOSTNAME is not set" >&2
             exit 1
           fi
-          if [ "${{ github.ref_name }}" = "development" ]; then
-            pnpm run deploy --source-maps --yes
+
+          if [ "${SANITY_ACTIVE_ENV}" == "development" ]; then
+            pnpm --filter ./apps/studio run deploy --yes --source-maps
           else
-            pnpm run deploy --yes
+            pnpm --filter ./apps/studio run deploy --yes
           fi
-          echo "STUDIO_URL=https://${SANITY_STUDIO_HOSTNAME}.sanity.studio" >> "$GITHUB_OUTPUT"
+
+          echo "STUDIO_URL=https://${SANITY_STUDIO_HOSTNAME}.sanity.studio" >> $GITHUB_OUTPUT
 
       - name: Post preview link
         if: github.event_name == 'pull_request' && github.event.action == 'opened'
@@ -83,6 +83,7 @@ jobs:
               `Visit [${process.env.STUDIO_URL}](${process.env.STUDIO_URL}) to see your changes.`,
               "*This is a temporary environment that will be undeployed when this PR is merged or closed.*"
             ].join('\n\n')
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -96,23 +97,33 @@ jobs:
     name: Teardown
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
+
+    # Deliberately the same group as this PR's preview deploy, so closing the PR
+    # cancels an in-flight preview before it can create a hostname nothing would
+    # ever clean up.
+    concurrency:
+      group: studio-pr-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+
     environment:
       name: Preview
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
-        with:
-          package_json_file: apps/studio/package.json
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: pnpm
-          cache-dependency-path: apps/studio/pnpm-lock.yaml
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # Best-effort: a PR closed before its preview ever deployed has no
+      # hostname to remove, and that should not fail the run.
       - name: Cleanup PR preview
-        run: pnpm exec sanity undeploy --yes
+        continue-on-error: true
+        run: pnpm --filter ./apps/studio exec sanity undeploy --yes
         env:
-          SANITY_STUDIO_HOSTNAME: ${{ vars.HOSTNAME || 'fit' }}-pr-${{ github.event.pull_request.number }}
+          SANITY_STUDIO_HOSTNAME: ${{ vars.SANITY_STUDIO_BASE_HOSTNAME || vars.HOSTNAME || 'fit' }}-pr-${{ github.event.pull_request.number }}

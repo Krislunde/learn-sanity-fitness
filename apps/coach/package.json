@@ -1,43 +1,33 @@
 {
-  "name": "fitness",
+  "name": "coach",
   "private": true,
   "version": "1.0.0",
+  "type": "module",
   "main": "package.json",
   "license": "UNLICENSED",
   "scripts": {
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
-    "lint": "eslint .",
-    "start": "sanity start",
-    "typecheck": "tsc --noEmit",
-    "typegen": "sanity schema extract --force && sanity typegen generate"
+    "start": "sanity start"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
-    "@sanity/icons": "^5.2.1",
-    "@sanity/ui": "^3.5.2",
-    "@sanity/vision": "^6.9.2",
+    "@sanity/sdk": "^2",
+    "@sanity/sdk-react": "^2",
+    "@sanity/ui": "^3.5.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
-    "sanity": "^6.9.2",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^6.0.0",
-    "@types/node": "^26.2.0",
     "@types/react": "^19.2.14",
     "eslint": "^9.28",
     "prettier": "^3.5",
+    "sanity": "^6.9.2",
     "typescript": "^5.8"
-  },
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 100,
-    "semi": false,
-    "singleQuote": true
   }
 }
