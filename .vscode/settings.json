@@ -1,0 +1,29 @@
+{
+  // Two formatters, each owning the app whose conventions it implements. Without
+  // this routing an editor formats on save with its own defaults, which silently
+  // rewrites whole files against whichever convention the app actually follows.
+
+  // Sanity apps (apps/studio, apps/coach, functions, repo root): Prettier, using
+  // the shared .prettierrc.json.
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+
+  // Nuxt app (apps/web): ESLint's stylistic rules are the formatter, per Nuxt's
+  // recommendation. Prettier is disabled for these types so the two never fight
+  // over Vue attribute wrapping.
+  "[vue]": {
+    "editor.defaultFormatter": null,
+    "editor.formatOnSave": false
+  },
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": [{"mode": "auto"}],
+
+  // Applies the stylistic rules on save for the Nuxt app, and is a no-op for the
+  // Sanity apps, whose ESLint config carries no formatting rules.
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  "prettier.requireConfig": true,
+  "prettier.ignorePath": ".prettierignore"
+}

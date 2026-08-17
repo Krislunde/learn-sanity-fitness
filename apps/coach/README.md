@@ -25,12 +25,12 @@ another one.
 
 ## How it works
 
-| File | Role |
-| --- | --- |
-| `src/App.tsx` | Entry point. Declares which project and dataset the app reads. |
-| `src/Exercises.tsx` | `useDocuments` to list every exercise. |
-| `src/Exercise.tsx` | `useDocumentProjection` for the name and difficulty of one row. |
-| `src/DemoVideoURL.tsx` | `useDocument` + `useEditDocument` to read and write one field. |
-| `src/Publish.tsx` | `useApplyDocumentActions` + `publishDocument` to publish a draft. |
+| File                   | Role                                                              |
+| ---------------------- | ----------------------------------------------------------------- |
+| `src/App.tsx`          | Entry point. Declares which project and dataset the app reads.    |
+| `src/Exercises.tsx`    | `useDocuments` to list every exercise.                            |
+| `src/Exercise.tsx`     | `useDocumentProjection` for the name and difficulty of one row.   |
+| `src/DemoVideoURL.tsx` | `useDocument` + `useEditDocument` to read and write one field.    |
+| `src/Publish.tsx`      | `useApplyDocumentActions` + `publishDocument` to publish a draft. |
 
 Data hooks suspend while loading, so each row renders inside a `<Suspense>` boundary.

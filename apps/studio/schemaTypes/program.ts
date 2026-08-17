@@ -62,7 +62,8 @@ export const program = defineType({
       // Required, but at warning level: programs whose old free-text goal could
       // not be classified automatically still need a human to pick a value. That
       // nudge belongs in the Studio, not in a red CI run.
-      validation: (rule) => rule.required().warning('Pick a focus so this program can be filtered.'),
+      validation: (rule) =>
+        rule.required().warning('Pick a focus so this program can be filtered.'),
     }),
     defineField({
       name: 'duration',

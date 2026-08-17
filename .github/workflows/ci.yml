@@ -47,8 +47,27 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
+      # Runs every workspace's own lint script. For apps/web that includes the
+      # stylistic rules that format it, so a save-on-format drift shows up here.
       - name: Lint
-        run: pnpm --filter ./apps/studio run lint --max-warnings 0
+        run: pnpm run --recursive lint
+
+  format:
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      # Covers the Sanity apps only; apps/web is in .prettierignore because
+      # ESLint formats it, and the lint job above is what checks it.
+      - name: Check formatting
+        run: pnpm run format:check
 
   validate-schema:
     name: Validate Studio schema
