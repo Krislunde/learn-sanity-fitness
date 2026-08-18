@@ -5,13 +5,13 @@ Applications developed while following courses on [sanity.io/learn](https://www.
 A pnpm workspace holding three applications plus one serverless function, all reading and writing
 the same Content Lake (project `w4np8kfp`).
 
-| Path | What it is |
-| --- | --- |
-| `apps/studio` | The Sanity Studio. Schema, migrations, and CLI scripts. |
-| `apps/web` | Nuxt 4 front end, typed from the Studio schema by Sanity TypeGen. |
-| `apps/coach` | App SDK application — a demo-video desk that runs outside the Studio. |
-| `functions/first-published` | Sanity Function stamping `firstPublished` on programs. |
-| `sanity.blueprint.ts` | Declares which functions deploy and what events trigger them. |
+| Path                        | What it is                                                            |
+| --------------------------- | --------------------------------------------------------------------- |
+| `apps/studio`               | The Sanity Studio. Schema, migrations, and CLI scripts.               |
+| `apps/web`                  | Nuxt 4 front end, typed from the Studio schema by Sanity TypeGen.     |
+| `apps/coach`                | App SDK application — a demo-video desk that runs outside the Studio. |
+| `functions/first-published` | Sanity Function stamping `firstPublished` on programs.                |
+| `sanity.blueprint.ts`       | Declares which functions deploy and what events trigger them.         |
 
 ## Getting started
 
