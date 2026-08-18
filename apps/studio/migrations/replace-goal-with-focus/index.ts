@@ -45,7 +45,9 @@ export default defineMigration({
       // the wording available to whoever picks a focus by hand, and leaves the
       // document matching this migration's filter so a later run can retry it.
       if (!focus) {
-        console.warn(`Could not classify goal ${JSON.stringify(doc[from])} on ${doc._id} - skipping`)
+        console.warn(
+          `Could not classify goal ${JSON.stringify(doc[from])} on ${doc._id} - skipping`,
+        )
         return
       }
 

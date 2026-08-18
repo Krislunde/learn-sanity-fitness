@@ -9,7 +9,7 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
-    "lint": "eslint .",
+    "lint": "eslint . --max-warnings 0",
     "start": "sanity start",
     "typecheck": "tsc --noEmit",
     "typegen": "sanity schema extract --force && sanity typegen generate"
@@ -33,11 +33,5 @@
     "eslint": "^9.28",
     "prettier": "^3.5",
     "typescript": "^5.8"
-  },
-  "prettier": {
-    "bracketSpacing": false,
-    "printWidth": 100,
-    "semi": false,
-    "singleQuote": true
   }
 }

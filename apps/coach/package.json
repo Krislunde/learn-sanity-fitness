@@ -9,6 +9,7 @@
     "build": "sanity build",
     "deploy": "sanity deploy",
     "dev": "sanity dev",
+    "lint": "eslint . --max-warnings 0",
     "start": "sanity start"
   },
   "keywords": [
