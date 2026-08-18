@@ -1,0 +1,18 @@
+# Nuxt recommends ESLint's stylistic rules as the formatter rather than Prettier,
+# so `apps/web` is formatted by `@nuxt/eslint` (configured in its nuxt.config.ts)
+# and Prettier stays out of it entirely. Running both would fight over Vue
+# attribute wrapping, which is exactly the churn this split avoids.
+apps/web/
+
+# Vendored from sanity-io/agent-toolkit and hash-verified in skills-lock.json,
+# so reformatting it would invalidate the recorded hash.
+.agents/
+
+# Generated, not hand-edited
+apps/studio/schema.json
+pnpm-lock.yaml
+
+node_modules/
+dist/
+.nuxt/
+.output/
