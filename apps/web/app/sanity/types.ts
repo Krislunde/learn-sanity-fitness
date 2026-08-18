@@ -50,30 +50,26 @@ export type Article = {
   description?: string;
   steps?: Array<{
     title?: string;
-    body?: Array<
-      | {
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?:
-            "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-          listItem?: "bullet" | "number";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }
-      | ({
-          _key: string;
-        } & Callout)
-    >;
+    body?: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+      listItem?: "bullet" | "number";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    } | {
+      _key: string;
+    } & Callout>;
     _type: "step";
     _key: string;
   }>;
@@ -166,30 +162,26 @@ export type Exercise = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  instructions?: Array<
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-    | ({
-        _key: string;
-      } & Callout)
-  >;
+  instructions?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    _key: string;
+  } & Callout>;
   demoImage?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -199,11 +191,9 @@ export type Exercise = {
     _type: "image";
   };
   demoVideoUrl?: string;
-  muscles?: Array<
-    {
-      _key: string;
-    } & MuscleReference
-  >;
+  muscles?: Array<{
+    _key: string;
+  } & MuscleReference>;
   equipment?: EquipmentReference;
   difficulty?: "beginner" | "intermediate" | "advanced";
 };
@@ -259,11 +249,9 @@ export type Workout = {
   title?: string;
   slug?: Slug;
   order?: number;
-  exercises?: Array<
-    {
-      _key: string;
-    } & ExerciseReference
-  >;
+  exercises?: Array<{
+    _key: string;
+  } & ExerciseReference>;
   estimatedDuration?: number;
   coach?: PersonReference;
 };
@@ -285,13 +273,7 @@ export type Program = {
   slug?: Slug;
   description?: string;
   goal?: string;
-  focus?:
-    | "strength"
-    | "hypertrophy"
-    | "fat-loss"
-    | "endurance"
-    | "mobility"
-    | "foundations";
+  focus?: "strength" | "hypertrophy" | "fat-loss" | "endurance" | "mobility" | "foundations";
   duration?: number;
   coverImage?: {
     asset?: SanityImageAssetReference;
@@ -301,11 +283,9 @@ export type Program = {
     alt?: string;
     _type: "image";
   };
-  workouts?: Array<
-    {
-      _key: string;
-    } & WorkoutReference
-  >;
+  workouts?: Array<{
+    _key: string;
+  } & WorkoutReference>;
   coach?: PersonReference;
   firstPublished?: string;
 };
@@ -426,37 +406,7 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes =
-  | Callout
-  | Testimonial
-  | PersonReference
-  | Article
-  | Slug
-  | BodyRegionReference
-  | SanityImageAssetReference
-  | Muscle
-  | SanityImageCrop
-  | SanityImageHotspot
-  | BodyRegion
-  | MuscleReference
-  | EquipmentReference
-  | Exercise
-  | EquipmentCategoryReference
-  | Equipment
-  | EquipmentCategory
-  | ExerciseReference
-  | Workout
-  | WorkoutReference
-  | Program
-  | Person
-  | SanityImagePaletteSwatch
-  | SanityImagePalette
-  | SanityImageDimensions
-  | SanityImageMetadata
-  | SanityFileAsset
-  | SanityAssetSourceData
-  | SanityImageAsset
-  | Geopoint;
+export type AllSanitySchemaTypes = Callout | Testimonial | PersonReference | Article | Slug | BodyRegionReference | SanityImageAssetReference | Muscle | SanityImageCrop | SanityImageHotspot | BodyRegion | MuscleReference | EquipmentReference | Exercise | EquipmentCategoryReference | Equipment | EquipmentCategory | ExerciseReference | Workout | WorkoutReference | Program | Person | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: PROGRAMS_QUERY
@@ -465,14 +415,7 @@ export type PROGRAMS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
   slug: Slug | null;
-  focus:
-    | "endurance"
-    | "fat-loss"
-    | "foundations"
-    | "hypertrophy"
-    | "mobility"
-    | "strength"
-    | null;
+  focus: "endurance" | "fat-loss" | "foundations" | "hypertrophy" | "mobility" | "strength" | null;
   duration: number | null;
 }>;
 
@@ -483,14 +426,7 @@ export type PROGRAM_QUERY_RESULT = {
   _id: string;
   title: string | null;
   description: string | null;
-  focus:
-    | "endurance"
-    | "fat-loss"
-    | "foundations"
-    | "hypertrophy"
-    | "mobility"
-    | "strength"
-    | null;
+  focus: "endurance" | "fat-loss" | "foundations" | "hypertrophy" | "mobility" | "strength" | null;
   duration: number | null;
   coach: {
     name: string | null;
@@ -531,30 +467,26 @@ export type EXERCISE_QUERY_RESULT = {
   _id: string;
   name: string | null;
   difficulty: "advanced" | "beginner" | "intermediate" | null;
-  instructions: Array<
-    | ({
-        _key: string;
-      } & Callout)
-    | {
-        children?: Array<{
-          marks?: Array<string>;
-          text?: string;
-          _type: "span";
-          _key: string;
-        }>;
-        style?:
-          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-        listItem?: "bullet" | "number";
-        markDefs?: Array<{
-          href?: string;
-          _type: "link";
-          _key: string;
-        }>;
-        level?: number;
-        _type: "block";
-        _key: string;
-      }
-  > | null;
+  instructions: Array<{
+    _key: string;
+  } & Callout | {
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }> | null;
   demoVideoUrl: string | null;
   muscles: Array<{
     name: string | null;
@@ -564,13 +496,3 @@ export type EXERCISE_QUERY_RESULT = {
   } | null;
 } | null;
 
-// Query TypeMap
-import "@sanity/client";
-declare module "@sanity/client" {
-  interface SanityQueries {
-    '*[_type == "program" && defined(slug.current)] | order(title asc){\n  _id, title, slug, focus, duration\n}': PROGRAMS_QUERY_RESULT;
-    '*[_type == "program" && slug.current == $slug][0]{\n  _id, title, description, focus, duration,\n  coach->{ name, slug },\n  workouts[]->{ _id, title, slug, order, estimatedDuration }\n}': PROGRAM_QUERY_RESULT;
-    '*[_type == "workout" && slug.current == $slug][0]{\n  _id, title, order, estimatedDuration,\n  coach->{ name },\n  exercises[]->{ _id, name, slug, difficulty }\n}': WORKOUT_QUERY_RESULT;
-    '*[_type == "exercise" && slug.current == $slug][0]{\n  _id, name, difficulty, instructions, demoVideoUrl,\n  muscles[]->{ name },\n  equipment->{ name }\n}': EXERCISE_QUERY_RESULT;
-  }
-}
