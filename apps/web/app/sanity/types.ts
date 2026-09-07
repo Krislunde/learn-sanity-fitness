@@ -272,7 +272,6 @@ export type Program = {
   title?: string;
   slug?: Slug;
   description?: string;
-  goal?: string;
   focus?: "strength" | "hypertrophy" | "fat-loss" | "endurance" | "mobility" | "foundations";
   duration?: number;
   coverImage?: {
@@ -410,7 +409,7 @@ export type AllSanitySchemaTypes = Callout | Testimonial | PersonReference | Art
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: PROGRAMS_QUERY
-// Query: *[_type == "program" && defined(slug.current)] | order(title asc){  _id, title, slug, focus, duration}
+// Query: *[_type == "program" && defined(slug.current)] | order(title asc){    _id,     title,    slug,    focus,    duration  }
 export type PROGRAMS_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -421,7 +420,7 @@ export type PROGRAMS_QUERY_RESULT = Array<{
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: PROGRAM_QUERY
-// Query: *[_type == "program" && slug.current == $slug][0]{  _id, title, description, focus, duration,  coach->{ name, slug },  workouts[]->{ _id, title, slug, order, estimatedDuration }}
+// Query: *[_type == "program" && slug.current == $slug][0]{    _id,     title,     description,     focus,     duration,    coach->{ name, slug },    workouts[]->{       _id,       title,       slug,       estimatedDuration     }  }
 export type PROGRAM_QUERY_RESULT = {
   _id: string;
   title: string | null;
@@ -436,18 +435,16 @@ export type PROGRAM_QUERY_RESULT = {
     _id: string;
     title: string | null;
     slug: Slug | null;
-    order: number | null;
     estimatedDuration: number | null;
   }> | null;
 } | null;
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: WORKOUT_QUERY
-// Query: *[_type == "workout" && slug.current == $slug][0]{  _id, title, order, estimatedDuration,  coach->{ name },  exercises[]->{ _id, name, slug, difficulty }}
+// Query: *[_type == "workout" && slug.current == $slug][0]{    _id, title,     estimatedDuration,    coach->{ name },    exercises[]->{       _id,       name,       slug,       difficulty     }  }
 export type WORKOUT_QUERY_RESULT = {
   _id: string;
   title: string | null;
-  order: number | null;
   estimatedDuration: number | null;
   coach: {
     name: string | null;
@@ -462,7 +459,7 @@ export type WORKOUT_QUERY_RESULT = {
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: EXERCISE_QUERY
-// Query: *[_type == "exercise" && slug.current == $slug][0]{  _id, name, difficulty, instructions, demoVideoUrl,  muscles[]->{ name },  equipment->{ name }}
+// Query: *[_type == "exercise" && slug.current == $slug][0]{    _id,     name,     difficulty,     instructions,     demoVideoUrl,    muscles[]->{ name },    equipment->{ name }  }
 export type EXERCISE_QUERY_RESULT = {
   _id: string;
   name: string | null;

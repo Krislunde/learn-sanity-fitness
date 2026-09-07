@@ -1592,13 +1592,6 @@
         },
         "optional": true
       },
-      "goal": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "string"
-        },
-        "optional": true
-      },
       "focus": {
         "type": "objectAttribute",
         "value": {
