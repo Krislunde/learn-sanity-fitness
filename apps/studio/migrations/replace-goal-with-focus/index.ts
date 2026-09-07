@@ -1,4 +1,4 @@
-import {defineMigration, at, setIfMissing, unset, insert} from 'sanity/migrate'
+import {defineMigration, at, setIfMissing, unset, append} from 'sanity/migrate'
 import {PROGRAM_FOCUS_LABELS} from '../../schemaTypes/program'
 
 // Should be unique for the migration but never change.
@@ -56,7 +56,7 @@ export default defineMigration({
         at(from, unset()),
         // … add idempotence key
         at('_migrations', setIfMissing([])),
-        at('_migrations', insert(idempotenceKey, 'after', 0)),
+        at('_migrations', append(idempotenceKey)),
       ]
     },
   },

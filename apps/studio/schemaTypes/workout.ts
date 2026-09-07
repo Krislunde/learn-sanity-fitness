@@ -27,6 +27,13 @@ export const workout = defineType({
       type: 'number',
       description: 'Position within a program, e.g. 1 for day one.',
       validation: (rule) => rule.integer().positive(),
+
+      deprecated: {
+        reason:
+          "Doesn't make sense to store this here, as a workout can be used in multiple programs. Use Program.workouts instead.",
+      },
+      readOnly: true,
+      hidden: true,
     }),
     defineField({
       name: 'exercises',
@@ -48,12 +55,9 @@ export const workout = defineType({
     }),
   ],
   preview: {
-    select: {title: 'title', order: 'order', duration: 'estimatedDuration'},
-    prepare({title, order, duration}) {
-      const parts = [
-        typeof order === 'number' ? `Day ${order}` : null,
-        typeof duration === 'number' ? `${duration} min` : null,
-      ].filter(Boolean)
+    select: {title: 'title', duration: 'estimatedDuration'},
+    prepare({title, duration}) {
+      const parts = [typeof duration === 'number' ? `${duration} min` : null].filter(Boolean)
 
       return {title, subtitle: parts.join(' · ') || undefined}
     },

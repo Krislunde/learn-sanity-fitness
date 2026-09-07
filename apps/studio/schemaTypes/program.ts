@@ -42,15 +42,15 @@ export const program = defineType({
     // differently ("Build a strength base" vs "Lose fat"), so the value could not
     // be filtered or grouped on. Kept in code, hidden from editors, until the
     // migration has run everywhere and the field can be deleted outright.
-    defineField({
-      name: 'goal',
-      type: 'string',
-      deprecated: {
-        reason: 'Use the "Focus" field instead.',
-      },
-      readOnly: true,
-      hidden: true,
-    }),
+    // defineField({
+    //   name: 'goal',
+    //   type: 'string',
+    //   deprecated: {
+    //     reason: 'Use the "Focus" field instead.',
+    //   },
+    //   readOnly: true,
+    //   hidden: true,
+    // }),
     defineField({
       name: 'focus',
       type: 'string',
