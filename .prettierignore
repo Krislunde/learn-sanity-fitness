@@ -12,6 +12,11 @@ apps/web/
 apps/studio/schema.json
 pnpm-lock.yaml
 
+# Machine-local and git-ignored, so it never reaches CI - but Prettier walks the
+# working tree rather than the index, so without this it fails `format:check`
+# locally for whoever has one.
+CLAUDE.md
+
 node_modules/
 dist/
 .nuxt/
