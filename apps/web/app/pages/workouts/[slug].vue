@@ -16,11 +16,9 @@ if (!workout.value) {
     <h1>{{ workout.title }}</h1>
 
     <p
-      v-if="workout.order || workout.estimatedDuration || workout.coach"
+      v-if="workout.estimatedDuration || workout.coach"
       class="meta"
     >
-      <span v-if="workout.order">Day {{ workout.order }}</span>
-      <span v-if="workout.order && (workout.estimatedDuration || workout.coach)"> · </span>
       <span v-if="workout.estimatedDuration">{{ workout.estimatedDuration }} min</span>
       <span v-if="workout.estimatedDuration && workout.coach"> · </span>
       <span v-if="workout.coach">with {{ workout.coach.name }}</span>
