@@ -12,484 +12,538 @@
  * ---------------------------------------------------------------------------------
  */
 
-export declare const internalGroqTypeReferenceTo: unique symbol;
+export declare const internalGroqTypeReferenceTo: unique symbol
 
 // Source: schema.json
 export type Callout = {
-  _type: "callout";
-  tone?: "tip" | "caution" | "safety";
-  text?: string;
-};
+  _type: 'callout'
+  tone?: 'tip' | 'caution' | 'safety'
+  text?: string
+}
 
 export type Testimonial = {
-  _id: string;
-  _type: "testimonial";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  quote?: string;
-  person?: string;
-  result?: string;
-};
+  _id: string
+  _type: 'testimonial'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  quote?: string
+  person?: string
+  result?: string
+}
 
 export type PersonReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "person";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'person'
+}
 
 export type Article = {
-  _id: string;
-  _type: "article";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  description?: string;
+  _id: string
+  _type: 'article'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  description?: string
   steps?: Array<{
-    title?: string;
-    body?: Array<{
-      children?: Array<{
-        marks?: Array<string>;
-        text?: string;
-        _type: "span";
-        _key: string;
-      }>;
-      style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-      listItem?: "bullet" | "number";
-      markDefs?: Array<{
-        href?: string;
-        _type: "link";
-        _key: string;
-      }>;
-      level?: number;
-      _type: "block";
-      _key: string;
-    } | {
-      _key: string;
-    } & Callout>;
-    _type: "step";
-    _key: string;
-  }>;
-  coach?: PersonReference;
-};
+    title?: string
+    body?: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>
+            text?: string
+            _type: 'span'
+            _key: string
+          }>
+          style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+          listItem?: 'bullet' | 'number'
+          markDefs?: Array<{
+            href?: string
+            _type: 'link'
+            _key: string
+          }>
+          level?: number
+          _type: 'block'
+          _key: string
+        }
+      | ({
+          _key: string
+        } & Callout)
+    >
+    _type: 'step'
+    _key: string
+  }>
+  coach?: PersonReference
+}
 
 export type Slug = {
-  _type: "slug";
-  current?: string;
-  source?: string;
-};
+  _type: 'slug'
+  current?: string
+  source?: string
+}
 
 export type BodyRegionReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "bodyRegion";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'bodyRegion'
+}
 
 export type SanityImageAssetReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'sanity.imageAsset'
+}
 
 export type Muscle = {
-  _id: string;
-  _type: "muscle";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  bodyRegion?: BodyRegionReference;
+  _id: string
+  _type: 'muscle'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  bodyRegion?: BodyRegionReference
   diagram?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-};
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+}
 
 export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
+  _type: 'sanity.imageCrop'
+  top?: number
+  bottom?: number
+  left?: number
+  right?: number
+}
 
 export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
+  _type: 'sanity.imageHotspot'
+  x?: number
+  y?: number
+  height?: number
+  width?: number
+}
 
 export type BodyRegion = {
-  _id: string;
-  _type: "bodyRegion";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  description?: string;
-};
+  _id: string
+  _type: 'bodyRegion'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  description?: string
+}
 
 export type MuscleReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "muscle";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'muscle'
+}
 
 export type EquipmentReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "equipment";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'equipment'
+}
 
 export type Exercise = {
-  _id: string;
-  _type: "exercise";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
-  instructions?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    _key: string;
-  } & Callout>;
+  _id: string
+  _type: 'exercise'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
+  instructions?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<{
+          href?: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | ({
+        _key: string
+      } & Callout)
+  >
   demoImage?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  demoVideoUrl?: string;
-  muscles?: Array<{
-    _key: string;
-  } & MuscleReference>;
-  equipment?: EquipmentReference;
-  difficulty?: "beginner" | "intermediate" | "advanced";
-};
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  demoVideoUrl?: string
+  muscles?: Array<
+    {
+      _key: string
+    } & MuscleReference
+  >
+  equipment?: EquipmentReference
+  difficulty?: 'beginner' | 'intermediate' | 'advanced'
+}
 
 export type EquipmentCategoryReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "equipmentCategory";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'equipmentCategory'
+}
 
 export type Equipment = {
-  _id: string;
-  _type: "equipment";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
+  _id: string
+  _type: 'equipment'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
   image?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  category?: EquipmentCategoryReference;
-};
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  category?: EquipmentCategoryReference
+}
 
 export type EquipmentCategory = {
-  _id: string;
-  _type: "equipmentCategory";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  description?: string;
-};
+  _id: string
+  _type: 'equipmentCategory'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  description?: string
+}
 
 export type ExerciseReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "exercise";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'exercise'
+}
 
 export type Workout = {
-  _id: string;
-  _type: "workout";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  order?: number;
-  exercises?: Array<{
-    _key: string;
-  } & ExerciseReference>;
-  estimatedDuration?: number;
-  coach?: PersonReference;
-};
+  _id: string
+  _type: 'workout'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  exercises?: Array<
+    {
+      _key: string
+    } & ExerciseReference
+  >
+  estimatedDuration?: number
+  coach?: PersonReference
+}
 
 export type WorkoutReference = {
-  _ref: string;
-  _type: "reference";
-  _weak?: boolean;
-  [internalGroqTypeReferenceTo]?: "workout";
-};
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'workout'
+}
 
 export type Program = {
-  _id: string;
-  _type: "program";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  slug?: Slug;
-  description?: string;
-  focus?: "strength" | "hypertrophy" | "fat-loss" | "endurance" | "mobility" | "foundations";
-  duration?: number;
+  _id: string
+  _type: 'program'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title?: string
+  slug?: Slug
+  description?: string
+  focus?: 'strength' | 'hypertrophy' | 'fat-loss' | 'endurance' | 'mobility' | 'foundations'
+  duration?: number
   coverImage?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  workouts?: Array<{
-    _key: string;
-  } & WorkoutReference>;
-  coach?: PersonReference;
-  firstPublished?: string;
-};
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  workouts?: Array<
+    {
+      _key: string
+    } & WorkoutReference
+  >
+  coach?: PersonReference
+  firstPublished?: string
+}
 
 export type Person = {
-  _id: string;
-  _type: "person";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name?: string;
-  slug?: Slug;
+  _id: string
+  _type: 'person'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  name?: string
+  slug?: Slug
   image?: {
-    asset?: SanityImageAssetReference;
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    alt?: string;
-    _type: "image";
-  };
-  bio?: string;
-};
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+  bio?: string
+}
 
 export type SanityImagePaletteSwatch = {
-  _type: "sanity.imagePaletteSwatch";
-  background?: string;
-  foreground?: string;
-  population?: number;
-  title?: string;
-};
+  _type: 'sanity.imagePaletteSwatch'
+  background?: string
+  foreground?: string
+  population?: number
+  title?: string
+}
 
 export type SanityImagePalette = {
-  _type: "sanity.imagePalette";
-  darkMuted?: SanityImagePaletteSwatch;
-  lightVibrant?: SanityImagePaletteSwatch;
-  darkVibrant?: SanityImagePaletteSwatch;
-  vibrant?: SanityImagePaletteSwatch;
-  dominant?: SanityImagePaletteSwatch;
-  lightMuted?: SanityImagePaletteSwatch;
-  muted?: SanityImagePaletteSwatch;
-};
+  _type: 'sanity.imagePalette'
+  darkMuted?: SanityImagePaletteSwatch
+  lightVibrant?: SanityImagePaletteSwatch
+  darkVibrant?: SanityImagePaletteSwatch
+  vibrant?: SanityImagePaletteSwatch
+  dominant?: SanityImagePaletteSwatch
+  lightMuted?: SanityImagePaletteSwatch
+  muted?: SanityImagePaletteSwatch
+}
 
 export type SanityImageDimensions = {
-  _type: "sanity.imageDimensions";
-  height?: number;
-  width?: number;
-  aspectRatio?: number;
-};
+  _type: 'sanity.imageDimensions'
+  height?: number
+  width?: number
+  aspectRatio?: number
+}
 
 export type SanityImageMetadata = {
-  _type: "sanity.imageMetadata";
-  location?: Geopoint;
-  dimensions?: SanityImageDimensions;
-  palette?: SanityImagePalette;
-  lqip?: string;
-  blurHash?: string;
-  thumbHash?: string;
-  hasAlpha?: boolean;
-  isOpaque?: boolean;
-};
+  _type: 'sanity.imageMetadata'
+  location?: Geopoint
+  dimensions?: SanityImageDimensions
+  palette?: SanityImagePalette
+  lqip?: string
+  blurHash?: string
+  thumbHash?: string
+  hasAlpha?: boolean
+  isOpaque?: boolean
+}
 
 export type SanityFileAsset = {
-  _id: string;
-  _type: "sanity.fileAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  source?: SanityAssetSourceData;
-};
+  _id: string
+  _type: 'sanity.fileAsset'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash?: string
+  extension?: string
+  mimeType?: string
+  size?: number
+  assetId?: string
+  uploadId?: string
+  path?: string
+  url?: string
+  source?: SanityAssetSourceData
+}
 
 export type SanityAssetSourceData = {
-  _type: "sanity.assetSourceData";
-  name?: string;
-  id?: string;
-  url?: string;
-};
+  _type: 'sanity.assetSourceData'
+  name?: string
+  id?: string
+  url?: string
+}
 
 export type SanityImageAsset = {
-  _id: string;
-  _type: "sanity.imageAsset";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  originalFilename?: string;
-  label?: string;
-  title?: string;
-  description?: string;
-  altText?: string;
-  sha1hash?: string;
-  extension?: string;
-  mimeType?: string;
-  size?: number;
-  assetId?: string;
-  uploadId?: string;
-  path?: string;
-  url?: string;
-  metadata?: SanityImageMetadata;
-  source?: SanityAssetSourceData;
-};
+  _id: string
+  _type: 'sanity.imageAsset'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  originalFilename?: string
+  label?: string
+  title?: string
+  description?: string
+  altText?: string
+  sha1hash?: string
+  extension?: string
+  mimeType?: string
+  size?: number
+  assetId?: string
+  uploadId?: string
+  path?: string
+  url?: string
+  metadata?: SanityImageMetadata
+  source?: SanityAssetSourceData
+}
 
 export type Geopoint = {
-  _type: "geopoint";
-  lat?: number;
-  lng?: number;
-  alt?: number;
-};
+  _type: 'geopoint'
+  lat?: number
+  lng?: number
+  alt?: number
+}
 
-export type AllSanitySchemaTypes = Callout | Testimonial | PersonReference | Article | Slug | BodyRegionReference | SanityImageAssetReference | Muscle | SanityImageCrop | SanityImageHotspot | BodyRegion | MuscleReference | EquipmentReference | Exercise | EquipmentCategoryReference | Equipment | EquipmentCategory | ExerciseReference | Workout | WorkoutReference | Program | Person | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes =
+  | Callout
+  | Testimonial
+  | PersonReference
+  | Article
+  | Slug
+  | BodyRegionReference
+  | SanityImageAssetReference
+  | Muscle
+  | SanityImageCrop
+  | SanityImageHotspot
+  | BodyRegion
+  | MuscleReference
+  | EquipmentReference
+  | Exercise
+  | EquipmentCategoryReference
+  | Equipment
+  | EquipmentCategory
+  | ExerciseReference
+  | Workout
+  | WorkoutReference
+  | Program
+  | Person
+  | SanityImagePaletteSwatch
+  | SanityImagePalette
+  | SanityImageDimensions
+  | SanityImageMetadata
+  | SanityFileAsset
+  | SanityAssetSourceData
+  | SanityImageAsset
+  | Geopoint
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: PROGRAMS_QUERY
 // Query: *[_type == "program" && defined(slug.current)] | order(title asc){    _id,     title,    slug,    focus,    duration  }
 export type PROGRAMS_QUERY_RESULT = Array<{
-  _id: string;
-  title: string | null;
-  slug: Slug | null;
-  focus: "endurance" | "fat-loss" | "foundations" | "hypertrophy" | "mobility" | "strength" | null;
-  duration: number | null;
-}>;
+  _id: string
+  title: string | null
+  slug: Slug | null
+  focus: 'endurance' | 'fat-loss' | 'foundations' | 'hypertrophy' | 'mobility' | 'strength' | null
+  duration: number | null
+}>
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: PROGRAM_QUERY
 // Query: *[_type == "program" && slug.current == $slug][0]{    _id,     title,     description,     focus,     duration,    coach->{ name, slug },    workouts[]->{       _id,       title,       slug,       estimatedDuration     }  }
 export type PROGRAM_QUERY_RESULT = {
-  _id: string;
-  title: string | null;
-  description: string | null;
-  focus: "endurance" | "fat-loss" | "foundations" | "hypertrophy" | "mobility" | "strength" | null;
-  duration: number | null;
+  _id: string
+  title: string | null
+  description: string | null
+  focus: 'endurance' | 'fat-loss' | 'foundations' | 'hypertrophy' | 'mobility' | 'strength' | null
+  duration: number | null
   coach: {
-    name: string | null;
-    slug: Slug | null;
-  } | null;
+    name: string | null
+    slug: Slug | null
+  } | null
   workouts: Array<{
-    _id: string;
-    title: string | null;
-    slug: Slug | null;
-    estimatedDuration: number | null;
-  }> | null;
-} | null;
+    _id: string
+    title: string | null
+    slug: Slug | null
+    estimatedDuration: number | null
+  }> | null
+} | null
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: WORKOUT_QUERY
 // Query: *[_type == "workout" && slug.current == $slug][0]{    _id, title,     estimatedDuration,    coach->{ name },    exercises[]->{       _id,       name,       slug,       difficulty     }  }
 export type WORKOUT_QUERY_RESULT = {
-  _id: string;
-  title: string | null;
-  estimatedDuration: number | null;
+  _id: string
+  title: string | null
+  estimatedDuration: number | null
   coach: {
-    name: string | null;
-  } | null;
+    name: string | null
+  } | null
   exercises: Array<{
-    _id: string;
-    name: string | null;
-    slug: Slug | null;
-    difficulty: "advanced" | "beginner" | "intermediate" | null;
-  }> | null;
-} | null;
+    _id: string
+    name: string | null
+    slug: Slug | null
+    difficulty: 'advanced' | 'beginner' | 'intermediate' | null
+  }> | null
+} | null
 
 // Source: ../web/app/sanity/queries.ts
 // Variable: EXERCISE_QUERY
 // Query: *[_type == "exercise" && slug.current == $slug][0]{    _id,     name,     difficulty,     instructions,     demoVideoUrl,    muscles[]->{ name },    equipment->{ name }  }
 export type EXERCISE_QUERY_RESULT = {
-  _id: string;
-  name: string | null;
-  difficulty: "advanced" | "beginner" | "intermediate" | null;
-  instructions: Array<{
-    _key: string;
-  } & Callout | {
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }> | null;
-  demoVideoUrl: string | null;
+  _id: string
+  name: string | null
+  difficulty: 'advanced' | 'beginner' | 'intermediate' | null
+  instructions: Array<
+    | ({
+        _key: string
+      } & Callout)
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<{
+          href?: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+  > | null
+  demoVideoUrl: string | null
   muscles: Array<{
-    name: string | null;
-  }> | null;
+    name: string | null
+  }> | null
   equipment: {
-    name: string | null;
-  } | null;
-} | null;
+    name: string | null
+  } | null
+} | null
 
+// Query TypeMap
+import '@sanity/client'
+declare module '@sanity/client' {
+  interface SanityQueries {
+    '\n  *[_type == "program" && defined(slug.current)] | order(title asc){\n    _id, \n    title,\n    slug,\n    focus,\n    duration\n  }\n': PROGRAMS_QUERY_RESULT
+    '\n  *[_type == "program" && slug.current == $slug][0]{\n    _id, \n    title, \n    description, \n    focus, \n    duration,\n    coach->{ name, slug },\n    workouts[]->{ \n      _id, \n      title, \n      slug, \n      estimatedDuration \n    }\n  }\n': PROGRAM_QUERY_RESULT
+    '\n  *[_type == "workout" && slug.current == $slug][0]{\n    _id, title, \n    estimatedDuration,\n    coach->{ name },\n    exercises[]->{ \n      _id, \n      name, \n      slug, \n      difficulty \n    }\n  }\n': WORKOUT_QUERY_RESULT
+    '\n  *[_type == "exercise" && slug.current == $slug][0]{\n    _id, \n    name, \n    difficulty, \n    instructions, \n    demoVideoUrl,\n    muscles[]->{ name },\n    equipment->{ name }\n  }\n': EXERCISE_QUERY_RESULT
+  }
+}
