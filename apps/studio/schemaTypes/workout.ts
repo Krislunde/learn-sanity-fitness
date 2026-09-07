@@ -22,20 +22,6 @@ export const workout = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: 'order',
-      title: 'Day / Order',
-      type: 'number',
-      description: 'Position within a program, e.g. 1 for day one.',
-      validation: (rule) => rule.integer().positive(),
-
-      deprecated: {
-        reason:
-          "Doesn't make sense to store this here, as a workout can be used in multiple programs. Use Program.workouts instead.",
-      },
-      readOnly: true,
-      hidden: true,
-    }),
-    defineField({
       name: 'exercises',
       type: 'array',
       of: [defineArrayMember({type: 'reference', to: [{type: 'exercise'}]})],

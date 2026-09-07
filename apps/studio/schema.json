@@ -1459,13 +1459,6 @@
         },
         "optional": true
       },
-      "order": {
-        "type": "objectAttribute",
-        "value": {
-          "type": "number"
-        },
-        "optional": true
-      },
       "exercises": {
         "type": "objectAttribute",
         "value": {
