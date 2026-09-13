@@ -17,6 +17,11 @@ pnpm-lock.yaml
 # Blueprint to its Stack and holds no secrets.
 /.sanity/
 
+# Machine-local and git-ignored, so it never reaches CI - but Prettier walks the
+# working tree rather than the index, so without this it fails `format:check`
+# locally for whoever has one.
+CLAUDE.md
+
 node_modules/
 dist/
 .nuxt/

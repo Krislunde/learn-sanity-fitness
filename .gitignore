@@ -4,6 +4,7 @@
 
 # Machine-local Claude Code settings
 .claude/settings.local.json
+CLAUDE.md
 
 # Archives / build output
 *.tar.gz
