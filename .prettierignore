@@ -12,6 +12,11 @@ apps/web/
 apps/studio/schema.json
 pnpm-lock.yaml
 
+# Written by the Sanity CLI on every `blueprints deploy` (it restamps updatedAt),
+# so formatting it just creates churn. Committed deliberately: it links this
+# Blueprint to its Stack and holds no secrets.
+/.sanity/
+
 node_modules/
 dist/
 .nuxt/
