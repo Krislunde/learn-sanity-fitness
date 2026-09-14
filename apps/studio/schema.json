@@ -1189,6 +1189,20 @@
           ]
         },
         "optional": true
+      },
+      "musclesSuggestedAt": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
+      "musclesSuggestionNote": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
       }
     }
   },

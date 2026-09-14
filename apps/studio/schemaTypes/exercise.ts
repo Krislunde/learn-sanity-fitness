@@ -68,6 +68,25 @@ export const exercise = defineType({
         layout: 'radio',
       },
     }),
+    // Written by the `complete-muscles` Sanity Function, never by an editor. Set on
+    // every outcome, including when the model declines to suggest anything, so each
+    // exercise is considered exactly once — the event filter excludes it afterwards.
+    defineField({
+      name: 'musclesSuggestedAt',
+      title: 'Muscles suggested',
+      description: 'Automatically set when the muscle tagging was last considered.',
+      type: 'datetime',
+      readOnly: true,
+    }),
+    // Written by the `complete-muscles` Sanity Function alongside a suggestion, so the
+    // editor reviewing the unpublished changes can see why these muscles were proposed.
+    defineField({
+      name: 'musclesSuggestionNote',
+      title: 'Muscle suggestion note',
+      description: 'Why these muscles were proposed.',
+      type: 'string',
+      readOnly: true,
+    }),
   ],
   preview: {
     select: {title: 'name', subtitle: 'difficulty', media: 'demoImage'},
