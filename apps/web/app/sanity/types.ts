@@ -204,6 +204,8 @@ export type Exercise = {
   >
   equipment?: EquipmentReference
   difficulty?: 'beginner' | 'intermediate' | 'advanced'
+  musclesSuggestedAt?: string
+  musclesSuggestionNote?: string
 }
 
 export type EquipmentCategoryReference = {

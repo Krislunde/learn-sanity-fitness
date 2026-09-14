@@ -14,7 +14,8 @@ export default defineBlueprint({
       name: 'complete-muscles',
       event: {
         on: ['create', 'update'],
-        filter: '_type == "exercise" && (!defined(muscles) || count(muscles) < 2)',
+        filter:
+          '_type == "exercise" && (!defined(muscles) || count(muscles) < 2) && !defined(musclesSuggestedAt)',
         projection: '{_id, name, muscles}',
         resource: {
           type: 'dataset',
