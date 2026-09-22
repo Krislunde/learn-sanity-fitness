@@ -10,7 +10,12 @@ import {documentEventHandler} from '@sanity/functions'
 const SCHEMA_ID = 'uEiB81k2a9rDuCuHyrdd8vQrAsiGbzmeyVuRpzJ22dKd6Fg'
 void SCHEMA_ID
 
-const MIN_MUSCLES = 2
+// The floor on what the model may propose. One, not two: a single-joint isolation
+// movement — a rope pushdown, a calf raise — has exactly one primary mover, and the
+// muscle vocabulary is eleven coarse groups with no room for a second honest pick.
+// A floor of two made the model decline those outright rather than answer with one.
+// Thin suggestions on genuine compound lifts are caught by the draft review instead.
+const MIN_MUSCLES = 1
 
 interface ExerciseData {
   _id: string
@@ -35,10 +40,15 @@ export const handler = documentEventHandler<ExerciseData>(async ({context, event
   const now = new Date().toISOString()
 
   // Stamped on every outcome, a decline included, so the document is considered once
-  // and then excluded by the event filter. This is the only thing written to the
-  // published document: the suggestion itself only ever lands on the draft.
-  const markConsidered = () =>
-    write.patch(publishedId).set({musclesSuggestedAt: now}).commit({dryRun: context.local})
+  // and then excluded by the event filter. The muscles themselves only ever land on
+  // the draft. Published carries the stamp and, when nothing was suggested, the note
+  // explaining why — otherwise the reason would exist only in the function log, and
+  // the editor would see a stamped, untagged exercise with no explanation.
+  const markConsidered = (note?: string) => {
+    const fields: Record<string, string> = {musclesSuggestedAt: now}
+    if (note) fields.musclesSuggestionNote = note
+    return write.patch(publishedId).set(fields).commit({dryRun: context.local})
+  }
 
   try {
     const result = await agent.agent.action.prompt<MuscleChoice>({
@@ -50,12 +60,17 @@ export const handler = documentEventHandler<ExerciseData>(async ({context, event
         'Choose only from these muscle documents: $muscles',
         '',
         'Respond in JSON with exactly this shape:',
-        '{"ids": ["<_id>", "<_id>"], "reasoning": "one short sentence"}',
+        '{"ids": ["<_id>"], "reasoning": "one short sentence"}',
         '',
         'Rules:',
         '- Use only _id values from the supplied list. Never invent one.',
-        '- Return the primary movers, normally two to four. Do not pad with minor stabilisers.',
-        '- If you cannot confidently pick at least two, return {"ids": [], "reasoning": "why"}.',
+        '- Return the primary movers: the muscles the movement is built to work.',
+        '  Do not pad the list with minor stabilisers.',
+        '- A compound movement normally has two to four primary movers. A single-joint',
+        '  isolation movement has one, and a single _id is the correct answer for it.',
+        '  Never add a second muscle just to reach a quota.',
+        '- Only return {"ids": [], "reasoning": "why"} if no muscle in the list is a',
+        '  primary mover for this exercise.',
       ].join('\n'),
       instructionParams: {
         exercise: {type: 'document', documentId: publishedId},
@@ -70,7 +85,7 @@ export const handler = documentEventHandler<ExerciseData>(async ({context, event
     const proposed = [...new Set(parsed?.ids ?? [])]
 
     if (proposed.length < MIN_MUSCLES) {
-      await markConsidered()
+      await markConsidered(parsed?.reasoning)
       console.log(`Skip ${data.name}: ${proposed.length} proposed. ${parsed?.reasoning ?? ''}`)
       return
     }
@@ -90,19 +105,12 @@ export const handler = documentEventHandler<ExerciseData>(async ({context, event
     const base = (draft ? (draft.muscles ?? []) : (data.muscles ?? [])).map((m) => m._ref)
     const toAdd = valid.filter((id) => !base.includes(id))
 
+    // Nothing to add, either because the muscles are already there or because every
+    // proposed ID was invalid. The reasoning still describes the tags the exercise
+    // carries, so it is worth keeping rather than discarding.
     if (!toAdd.length) {
-      await markConsidered()
+      await markConsidered(parsed?.reasoning)
       console.log(`Skip ${data.name}: nothing new to add.`)
-      return
-    }
-
-    // Only suggest a set that would actually clear the two-muscle bar, so accepting the
-    // draft cannot leave the document in a state that still looks under-tagged.
-    if (base.length + toAdd.length < MIN_MUSCLES) {
-      await markConsidered()
-      console.log(
-        `Skip ${data.name}: ${toAdd.length} valid of ${proposed.length} proposed, still under ${MIN_MUSCLES}.`,
-      )
       return
     }
 
@@ -128,6 +136,8 @@ export const handler = documentEventHandler<ExerciseData>(async ({context, event
 
     // Deliberately after the draft edit. If that throws, the document stays unmarked and
     // is retried on the next publish; marking first would lose the suggestion silently.
+    // No note passed: on a suggestion the reasoning belongs on the draft, next to the
+    // muscles it explains, not on the published document.
     await markConsidered()
 
     console.log(

@@ -14,6 +14,10 @@ export default defineBlueprint({
       name: 'complete-muscles',
       event: {
         on: ['create', 'update'],
+        // Deliberately wider than the function's own floor of one muscle. This selects
+        // exercises worth a look, one-muscle ones included, since a compound lift tagged
+        // with a single muscle probably wants more. `musclesSuggestedAt` is what actually
+        // stops an exercise being reconsidered, so the overlap costs nothing.
         filter:
           '_type == "exercise" && (!defined(muscles) || count(muscles) < 2) && !defined(musclesSuggestedAt)',
         projection: '{_id, name, muscles}',
