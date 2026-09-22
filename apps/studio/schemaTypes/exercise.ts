@@ -78,12 +78,14 @@ export const exercise = defineType({
       type: 'datetime',
       readOnly: true,
     }),
-    // Written by the `complete-muscles` Sanity Function alongside a suggestion, so the
-    // editor reviewing the unpublished changes can see why these muscles were proposed.
+    // Written by the `complete-muscles` Sanity Function, never by an editor. On a
+    // suggestion it lands on the draft, next to the muscles it explains, for the editor
+    // reviewing the unpublished changes. When nothing was suggested it lands on the
+    // published document instead, so a stamped but untagged exercise still says why.
     defineField({
       name: 'musclesSuggestionNote',
       title: 'Muscle suggestion note',
-      description: 'Why these muscles were proposed.',
+      description: 'Why these muscles were proposed, or why none were.',
       type: 'string',
       readOnly: true,
     }),
