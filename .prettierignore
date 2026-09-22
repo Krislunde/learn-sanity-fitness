@@ -22,6 +22,11 @@ pnpm-lock.yaml
 # locally for whoever has one.
 CLAUDE.md
 
+# Git-ignored import staging ground. Prettier walks the working tree rather than
+# the index, so without this it fails `format:check` locally for whoever has one -
+# the same trap as CLAUDE.md above.
+apps/studio/imported-data/
+
 node_modules/
 dist/
 .nuxt/
